@@ -151,6 +151,9 @@ public:
     explicit MultiListPickDelegate(QObject *parent = 0);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    Q_DISABLE_COPY(MultiListPickDelegate)
 };
 
 #endif // MULTILISTSELECTOR_H
