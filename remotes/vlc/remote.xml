@@ -1,0 +1,229 @@
+<remote>
+    <title>VLC</title>
+    <description>
+    <![CDATA[A simple VLC remote.<br><br>
+    Hint: Press and hold for additional controls in the context menu.<br><br>
+    Keyboard shortcuts:
+    <ul>
+    <li>Left: Seek backwards</li>
+    <li>Right: Seek forwards</li>
+    <li>P: Previous track</li>
+    <li>N: Next track</li>
+    <li>Space: Play/pause</li>
+    <li>A: Toggle aspect ratio</li>
+    <li>F: Toggle fullscreen</li>
+    <li>Ctrl+O: Open file</li>
+    <li>Ctrl+L: Show/hide playlist</li>
+    <li>Volume keys: Volume up/down</li>
+    </ul>]]>
+    </description>
+    <version>0.0.4</version>
+    <orientation>Qt::Horizontal | Qt::Vertical</orientation>
+    <page name="nowPlayingPage">
+        <timer name="syncTimer">
+            <repeat>true</repeat>
+            <onTriggered>getStatus()</onTriggered>
+        </timer>
+        <volumeKeys name="volumeKeys1">
+            <onUpPressed>screen.inPortrait ? decreaseVolume(10) : increaseVolume(10)</onUpPressed>
+            <onDownPressed>screen.inPortrait ? increaseVolume(10) : decreaseVolume(10)</onDownPressed>
+        </volumeKeys>
+        <keyboard name="keyboard1">
+            <onKeyPressed>processKeyEvent(event)</onKeyPressed>
+        </keyboard>
+        <image name="coverImage">
+            <width>
+                <portrait>360</portrait>
+                <landscape>320</landscape>
+            </width>
+            <height>
+                <portrait>360</portrait>
+                <landscape>320</landscape>
+            </height>
+            <rowSpan>
+                <portrait>1</portrait>
+                <landscape>4</landscape>
+            </rowSpan>
+            <colSpan>
+                <portrait>2</portrait>
+                <landscape>1</landscape>
+            </colSpan>
+            <alignment>Qt::AlignCenter</alignment>
+            <onClicked>getCoverArt()</onClicked>
+        </image>
+        <label name="titleLabel">
+            <row>
+                <portrait>1</portrait>
+                <landscape>0</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <colSpan>2</colSpan>
+            <wordWrap>true</wordWrap>
+        </label>
+        <label name="artistLabel">
+            <row>
+                <portrait>2</portrait>
+                <landscape>1</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <colSpan>2</colSpan>
+            <alignment>Qt::AlignTop</alignment>
+            <wordWrap>true</wordWrap>
+        </label>
+        <slider name="seekSlider">
+            <row>
+                <portrait>3</portrait>
+                <landscape>2</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <colSpan>2</colSpan>
+            <orientation>Qt::Horizontal</orientation>
+            <onSliderReleased>seek(seekSlider.value)</onSliderReleased>
+        </slider>
+        <label name="positionLabel">
+            <row>
+                <portrait>4</portrait>
+                <landscape>3</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <alignment>Qt::AlignLeft</alignment>
+            <text>--:--:--</text>
+        </label>
+        <label name="durationLabel">
+            <row>
+                <portrait>4</portrait>
+                <landscape>3</landscape>
+            </row>
+            <column>
+                <portrait>1</portrait>
+                <landscape>2</landscape>
+            </column>
+            <alignment>Qt::AlignRight</alignment>
+            <text>--:--:--</text>
+        </label>
+        <toolBar name="toolBar1">
+            <row>
+                <portrait>5</portrait>
+                <landscape>4</landscape>
+            </row>
+            <colSpan>
+                <portrait>2</portrait>
+                <landscape>3</landscape>
+            </colSpan>
+            <alignment>Qt::AlignBottom</alignment>
+            <toolButton name="prevButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Back.png</iconSource>
+                <onClicked>previous()</onClicked>
+            </toolButton>
+            <toolButton name="playPauseButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Play.png</iconSource>
+                <onClicked>playPause()</onClicked>
+            </toolButton>
+            <toolButton name="stopButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Stop.png</iconSource>
+                <onClicked>stop()</onClicked>
+            </toolButton>
+            <toolButton name="nextButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Forward.png</iconSource>
+                <onClicked>next()</onClicked>
+            </toolButton>
+            <toolButton name="browseButton">
+                <iconSource>general_toolbar_folder</iconSource>
+                <onClicked>fileDialog.open(); cd(currentDir);</onClicked>
+            </toolButton>
+        </toolBar>
+        <dialog name="fileDialog">
+            <title>Open file</title>
+            <height>
+                <portrait>680</portrait>
+                <landscape>380</landscape>
+            </height>
+            <button name="backButton">
+                <width>80</width>
+                <iconSource>filemanager_folder_up</iconSource>
+                <onClicked>cdUp()</onClicked>
+            </button>
+            <button name="homeButton">
+                <column>1</column>
+                <width>80</width>
+                <iconSource>general_presence_home</iconSource>
+                <onClicked>cdHome()</onClicked>
+            </button>
+            <label name="dirLabel">
+                <column>2</column>
+                <wordWrap>true</wordWrap>
+            </label>
+            <listView name="fileList">
+                <row>1</row>
+                <colSpan>3</colSpan>
+                <onCurrentItemChanged>onFileChosen(item.data)</onCurrentItemChanged>
+            </listView>
+            <action name="playAction">
+                <text>Play</text>
+                <onTriggered>playFile(fileList.currentItem.data.uri); fileDialog.close();</onTriggered>
+            </action>
+            <action name="queueAction">
+                <text>Enqueue</text>
+                <onTriggered>queueFile(fileList.currentItem.data.uri)</onTriggered>
+            </action>
+        </dialog>
+        <action name="repeatAction">
+            <text>Repeat</text>
+            <checkable>true</checkable>
+            <onTriggered>toggleRepeat()</onTriggered>
+        </action>
+        <action name="randomAction">
+            <text>Random</text>
+            <checkable>true</checkable>
+            <onTriggered>toggleRandom()</onTriggered>
+        </action>
+        <action name="fullscreenAction">
+            <text>Fullscreen</text>
+            <checkable>true</checkable>
+            <onTriggered>toggleFullscreen()</onTriggered>
+        </action>
+        <action name="refreshAction">
+            <text>Refresh</text>
+            <onTriggered>getStatus()</onTriggered>
+        </action>
+    </page>
+    <page name="playlistPage">
+        <volumeKeys name="volumeKeys2">
+            <onUpPressed>screen.inPortrait ? decreaseVolume(10) : increaseVolume(10)</onUpPressed>
+            <onDownPressed>screen.inPortrait ? increaseVolume(10) : decreaseVolume(10)</onDownPressed>
+        </volumeKeys>
+        <keyboard name="keyboard2">
+            <onKeyPressed>processKeyEvent(event)</onKeyPressed>
+        </keyboard>
+        <button name="clearButton">
+            <iconSource>general_delete</iconSource>
+            <text>Clear playlist</text>
+            <enabled>false</enabled>
+            <onClicked>clearPlaylist(); pageStack.currentIndex = 0;</onClicked>
+        </button>
+        <listView name="playlist">
+            <row>1</row>
+            <onCurrentItemChanged>playPlaylistItem(item.data.id)</onCurrentItemChanged>
+        </listView>
+        <action name="playAction2">
+            <text>Play</text>
+            <onTriggered>playPlaylistItem(playlist.currentItem.data.id)</onTriggered>
+        </action>
+        <action name="removeAction">
+            <text>Remove</text>
+            <onTriggered>removePlaylistItem(playlist.currentItem.data.id)</onTriggered>
+        </action>
+    </page>
+</remote>

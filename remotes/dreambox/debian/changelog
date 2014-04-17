@@ -1,0 +1,18 @@
+multimote-dreambox (0.0.3) unstable; urgency=low
+
+  * Added timer event functions.
+  * Changes to comply with MultiMote API.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Mon, 14 Apr 2014 21:19:43 +0000
+
+multimote-dreambox (0.0.2) unstable; urgency=low
+
+  * Changes to comply with MultiMote API.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Wed, 09 Apr 2014 22:56:23 +0000
+
+multimote-dreambox (0.0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Tue, 08 Apr 2014 20:48:34 +0000

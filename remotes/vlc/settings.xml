@@ -1,0 +1,20 @@
+<settings>
+    <group name="Connection" />
+    <text key="ipaddress" name="IP Address" onChanged="if (ipaddress) connectToVLC()" />
+    <group name="Sync" />
+    <boolean key="syncUI" default="false" name="Sync user interface" onChanged="syncTimer.running = (connectedToVLC) &amp;&amp; (syncUI)" />
+    <integer key="syncInterval" minimum="1000" maximum="30000" step="1000" default="5000" name="Sync interval (msecs)" onChanged="syncTimer.interval = syncInterval" />
+    <group name="Playback" />
+    <list key="seekMode" default="interval" name="Seek mode">
+        <element name="Interval" value="interval" />
+        <element name="Percent" value="percent" />
+    </list>
+    <integer key="seekInterval" minimum="5" maximum="600" step="5" default="10" name="Seek interval (secs)" />
+    <integer key="seekPercent" minimum="1" maximum="20" step="1" default="5" name="Seek percent" />
+    <group name="Other" />
+    <list key="screenOrientation" default="Qt::Horizontal | Qt::Vertical" name="Screen orientation" onChanged="screen.orientationLock = screenOrientation">
+	<element name="Automatic" value="Qt::Horizontal | Qt::Vertical" />
+        <element name="Landscape" value="Qt::Horizontal" />
+        <element name="Portrait" value="Qt::Vertical" />
+    </list>
+</settings>

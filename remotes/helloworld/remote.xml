@@ -1,0 +1,13 @@
+<remote>
+    <title>Hello World</title>
+    <description>A test remote using a C++ plugin.</description>
+    <orientation>Qt::Horizontal</orientation>
+    <page name="page">
+        <button name="button">
+            <width>200</width>
+            <alignment>Qt::AlignCenter</alignment>
+            <text>Click me</text>
+            <onClicked>helloworld.printMessage("Hello world!")</onClicked>
+        </button>
+    </page>
+</remote>

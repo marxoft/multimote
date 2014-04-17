@@ -1,0 +1,341 @@
+<remote>
+    <title>DreamBox</title>
+    <description>
+    <![CDATA[A simple DreamBox remote.<br><br>
+    Keyboard shortcuts:
+    <ul>
+    <li>Left: Previous page</li>
+    <li>Right: Next page</li>
+    <li>Volume keys: Volume up/down</li>
+    </ul>]]>
+    </description>
+    <version>0.0.3</version>
+    <orientation>Qt::Horizontal | Qt::Vertical</orientation>
+    <page name="page1">
+        <volumeKeys name="volumeKeys1">
+            <onUpPressed>sendRemoteKey("115")</onUpPressed>
+            <onDownPressed>sendRemoteKey("114")</onDownPressed>
+        </volumeKeys>
+        <keyboard name="keyboard1">
+            <onKeyPressed>keyNav(event)</onKeyPressed>
+        </keyboard>
+        <numberpad name="numberpad">
+            <row>
+                <portrait>1</portrait>
+                <landscape>0</landscape>
+            </row>
+            <one name="button1">
+                <text>1</text>
+                <onClicked>sendRemoteKey("2")</onClicked>
+            </one>
+            <two name="button2">
+                <text>2</text>
+                <onClicked>sendRemoteKey("3")</onClicked>
+            </two>
+            <three name="button3">
+                <text>3</text>
+                <onClicked>sendRemoteKey("4")</onClicked>
+            </three>
+            <four name="button4">
+                <text>4</text>
+                <onClicked>sendRemoteKey("5")</onClicked>
+            </four>
+            <five name="button5">
+                <text>5</text>
+                <onClicked>sendRemoteKey("6")</onClicked>
+            </five>
+            <six name="button6">
+                <text>6</text>
+                <onClicked>sendRemoteKey("7")</onClicked>
+            </six>
+            <seven name="button7">
+                <text>7</text>
+                <onClicked>sendRemoteKey("8")</onClicked>
+            </seven>
+            <eight name="button8">
+                <text>8</text>
+                <onClicked>sendRemoteKey("9")</onClicked>
+            </eight>
+            <nine name="button9">
+                <text>9</text>
+                <onClicked>sendRemoteKey("10")</onClicked>
+            </nine>
+            <back name="buttonBack">
+                <text><![CDATA[<]]></text>
+                <onClicked>sendRemoteKey("412")</onClicked>
+            </back>
+            <zero name="button0">
+                <text>0</text>
+                <onClicked>sendRemoteKey("11")</onClicked>
+            </zero>
+            <forward name="buttonForward">
+                <text><![CDATA[>]]></text>
+                <onClicked>sendRemoteKey("407")</onClicked>
+            </forward>
+        </numberpad>
+        <dpad name="dpad">
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <left name="left">
+                <text>Left</text>
+                <onClicked>sendRemoteKey("105")</onClicked>
+            </left>
+            <right name="right">
+                <text>Right</text>
+                <onClicked>sendRemoteKey("106")</onClicked>
+            </right>
+            <up name="up">
+                <text>Up</text>
+                <onClicked>sendRemoteKey("103")</onClicked>
+            </up>
+            <down name="down">
+                <text>Down</text>
+                <onClicked>sendRemoteKey("108")</onClicked>
+            </down>
+            <enter name="enter">
+                <text>OK</text>
+                <onClicked>sendRemoteKey("352")</onClicked>
+            </enter>
+        </dpad>
+        <toolBar name="toolBar1">
+            <row>
+                <portrait>2</portrait>
+                <landscape>1</landscape>
+            </row>
+            <toolButton name="infoButton">
+                <text>Info</text>
+                <onClicked>sendRemoteKey("358")</onClicked>
+            </toolButton>
+            <toolButton name="menuButton">
+                <text>Menu</text>
+                <onClicked>sendRemoteKey("141")</onClicked>
+            </toolButton>
+            <toolButton name="audioButton">
+                <text>Audio</text>
+                <onClicked>sendRemoteKey("392")</onClicked>
+            </toolButton>
+            <toolButton name="exitButton">
+                <text>Exit</text>
+                <onClicked>sendRemoteKey("1")</onClicked>
+            </toolButton>
+        </toolBar>
+        <toolBar name="toolBar2">
+            <row>
+                <portrait>3</portrait>
+                <landscape>1</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <toolButton name="redButton">
+                <text>Red</text>
+                <onClicked>sendRemoteKey("398")</onClicked>
+            </toolButton>
+            <toolButton name="greenButton">
+                <text>Green</text>
+                <onClicked>sendRemoteKey("399")</onClicked>
+            </toolButton>
+            <toolButton name="yellowButton">
+                <text>Yellow</text>
+                <onClicked>sendRemoteKey("400")</onClicked>
+            </toolButton>
+            <toolButton name="blueButton">
+                <text>Blue</text>
+                <onClicked>sendRemoteKey("401")</onClicked>
+            </toolButton>
+        </toolBar>
+    </page>
+    <page name="page2">
+        <volumeKeys name="volumeKeys2">
+            <onUpPressed>sendRemoteKey("114")</onUpPressed>
+            <onDownPressed>sendRemoteKey("115")</onDownPressed>
+        </volumeKeys>
+        <keyboard name="keyboard2">
+            <onKeyPressed>keyNav(event)</onKeyPressed>
+        </keyboard>
+        <listSelector name="bouquetSelector">
+            <text>Bouquet</text>
+            <onClicked>if (bouquetSelector.count == 0) loadBouquets();</onClicked>
+            <onSelected>loadChannels(bouquetSelector.currentValue)</onSelected>
+        </listSelector>
+        <button name="epgButton">
+            <column>1</column>
+            <text>EPG</text>
+            <onClicked>getEPG(channelListView.currentItem ? channelListView.currentItem.data : "")</onClicked>
+        </button>
+        <button name="timerButton">
+            <column>2</column>
+            <text>Timers</text>
+            <onClicked>timerDialog.open(); getTimerEvents();</onClicked>
+        </button>
+        <listView name="channelListView">
+            <row>1</row>
+            <colSpan>3</colSpan>
+            <onCurrentItemChanged>switchChannel(item.data)</onCurrentItemChanged>
+        </listView>
+        <dialog name="infoDialog">
+            <height>
+                <portrait>640</portrait>
+                <landscape>380</landscape>
+            </height>
+            <label name="infoLabel">
+                <wordWrap>true</wordWrap>
+            </label>
+        </dialog>
+        <dialog name="timerDialog">
+            <height>
+                <portrait>640</portrait>
+                <landscape>380</landscape>
+            </height>
+            <title>Timers</title>
+            <buttons>
+                <button name="cleanupTimersButton">
+                    <text>Cleanup</text>
+                    <onClicked>cleanupTimerEvents()</onClicked>
+                </button>
+                <button name="clearTimersButton">
+                    <text>Clear</text>
+                    <onClicked>clearTimerEvents()</onClicked>
+                </button>
+                <button name="newTimerButton">
+                    <text>New</text>
+                    <onClicked>editTimerDialog.open()</onClicked>
+                </button>
+            </buttons>
+            <listView name="timerList" />
+            <action name="removeTimerAction">
+                <text>Remove</text>
+                <onTriggered>removeTimerEvent(timerList.currentItem.data)</onTriggered>
+            </action>
+        </dialog>
+        <dialog name="editTimerDialog">
+            <height>
+                <portrait>640</portrait>
+                <landscape>380</landscape>
+            </height>
+            <title>New timer</title>
+            <buttons>
+                <button name="editTimerButton">
+                    <text>Save</text>
+                    <enabled>false</enabled>
+                    <onClicked>addTimerEvent(); editTimerDialog.close();</onClicked>
+                </button>
+            </buttons>
+            <listSelector name="timerTypeSelector">
+                <colSpan>2</colSpan>
+                <text>Type</text>
+                <currentIndex>0</currentIndex>
+                <element name="One-Time Event" value="regular" />
+                <element name="Recurring Event" value="repeating" />
+            </listSelector>
+            <listSelector name="timerActionSelector">
+                <row>1</row>
+                <colSpan>2</colSpan>
+                <text>Action</text>
+                <currentIndex>0</currentIndex>
+                <element name="DVR" value="dvr" />
+                <element name="NGRAB" value="ngrab" />
+                <element name="ZAP" value="zap" />
+            </listSelector>
+            <dateSelector name="timerStartDateSelector">
+                <row>2</row>
+                <text>Start date</text>
+            </dateSelector>
+            <timeSelector name="timerStartTimeSelector">
+                <row>2</row>
+                <column>1</column>
+                <text>Start time</text>
+            </timeSelector>
+            <dateSelector name="timerEndDateSelector">
+                <row>3</row>
+                <text>End date</text>
+            </dateSelector>
+            <timeSelector name="timerEndTimeSelector">
+                <row>3</row>
+                <column>1</column>
+                <text>End time</text>
+            </timeSelector>
+            <multiListSelector name="timerDaysSelector">
+                <row>4</row>
+                <colSpan>2</colSpan>
+                <text>Days</text>
+                <enabled>false</enabled>
+                <element name="Monday" value="mo" />
+                <element name="Tuesday" value="tu" />
+                <element name="Wednesday" value="we" />
+                <element name="Thursday" value="th" />
+                <element name="Friday" value="fr" />
+                <element name="Saturday" value="sa" />
+                <element name="Sunday" value="su" />
+            </multiListSelector>
+            <listSelector name="timerAfterSelector">
+                <row>5</row>
+                <colSpan>2</colSpan>
+                <text>After event do</text>
+                <currentIndex>0</currentIndex>
+                <element name="Nothing" value="0" />
+                <element name="Standby" value="134217728" />
+            </listSelector>
+            <listSelector name="timerBouquetSelector">
+                <row>6</row>
+                <colSpan>2</colSpan>
+                <text>Bouquet</text>
+                <onClicked>if (timerBouquetSelector.count == 0) loadBouquets();</onClicked>
+                <onSelected>loadTimerChannels(timerBouquetSelector.currentValue)</onSelected>
+            </listSelector>
+            <listSelector name="timerChannelSelector">
+                <row>7</row>
+                <colSpan>2</colSpan>
+                <text>Channel</text>
+                <onSelected>editTimerButton.enabled = true</onSelected>
+            </listSelector>
+            <label name="timerDescriptionLabel">
+                <row>8</row>
+                <colSpan>2</colSpan>
+                <text>Description</text>
+            </label>
+            <textField name="timerDescriptionField">
+                <row>9</row>
+                <colSpan>2</colSpan>
+            </textField>
+        </dialog>
+    </page>
+    <page name="page3">
+        <volumeKeys name="volumeKeys3">
+            <onUpPressed>sendRemoteKey("114")</onUpPressed>
+            <onDownPressed>sendRemoteKey("115")</onDownPressed>
+        </volumeKeys>
+        <keyboard name="keyboard3">
+            <onKeyPressed>keyNav(event)</onKeyPressed>
+        </keyboard>
+        <textField name="messageField">
+            <placeholderText>Message</placeholderText>
+            <onTextChanged>messageButton.enabled = (messageField.text != "")</onTextChanged>
+            <onReturnPressed>if (messageField.text) sendMessageToTV(messageField.text)</onReturnPressed>
+        </textField>
+        <button name="messageButton">
+            <width>150</width>
+            <column>1</column>
+            <text>Send</text>
+            <enabled>false</enabled>
+            <onClicked>if (messageField.text) sendMessageToTV(messageField.text)</onClicked>
+        </button>
+        <label name="screenShotLabel">
+            <row>1</row>
+            <colSpan>2</colSpan>
+            <width>400</width>
+            <text>Tap screen to take screenshot</text>
+            <alignment>Qt::AlignHCenter</alignment>
+            <wordWrap>true</wordWrap>
+        </label>
+        <image name="screenshotImage">
+            <row>2</row>
+            <colSpan>2</colSpan>
+            <fillMode>Qt::IgnoreAspectRatio</fillMode>
+            <onClicked>getScreenShot()</onClicked>
+        </image>
+    </page>
+</remote>

@@ -1,0 +1,4 @@
+MultiMote
+===================
+
+MultiMote is a plugin-based remote control application. Remotes can be defined easily using XML, and additional programming logic can be provided using C++ or JavaScript.

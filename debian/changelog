@@ -1,0 +1,21 @@
+multimote (0.0.3) unstable; urgency=low
+
+  * Added checkBox, dateSelector, doubleSpinBox, multiListSelector, spinBox and timeSelector controls.
+  * Improved callback handling for HTTP requests.
+  * Code re-factoring.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Mon, 14 Apr 2014 21:18:25 +0000
+
+multimote (0.0.2) unstable; urgency=low
+
+  * Added ability to pass headers for HTTP requests.
+  * Added 'send' method for custom HTTP requests.
+  * Added support for 'version' tag in remotes.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Wed, 09 Apr 2014 22:53:16 +0000
+
+multimote (0.0.1) unstable; urgency=low
+
+  * Initial Release. Only HTTP implemented.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Tue, 08 Apr 2014 20:48:34 +0000
