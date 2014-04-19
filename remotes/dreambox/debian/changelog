@@ -1,5 +1,6 @@
 multimote-dreambox (0.0.4) unstable; urgency=low
 
+  * Improve datetime formatting.
   * Bug fix: Displaying the timer event list shows only duplicates of the first timer event.
 
  -- Stuart Howarth <showarth@marxoft.co.uk>  Sat, 19 Apr 2014 14:24:15 +0000

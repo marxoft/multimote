@@ -37,15 +37,29 @@ timerTypeSelector.selected.connect(
 function dateTimeToString(dateTime) {
     /* Format a JS date to a string in "day/month/year hours:mins" format */
 
-    return dateTime.getDate()
-            + "/"
-            + (dateTime.getMonth() + 1)
-            + "/"
-            + dateTime.getFullYear()
-            + " "
-            + dateTime.getHours()
-            + ":"
-            + dateTime.getMinutes()
+    var day = dateTime.getDate();
+    var month = dateTime.getMonth() + 1;
+    var year = dateTime.getFullYear();
+    var hours = dateTime.getHours();
+    var mins = dateTime.getMinutes();
+
+    if (day < 10) {
+	day = "0" + day;
+    }
+
+    if (month < 10) {
+	month = "0" + month;
+    }
+
+    if (hours < 10) {
+	hours = "0" + hours;
+    }
+
+    if (mins < 10) {
+	mins = "0" + mins;
+    }
+
+    return day + "/" + month + "/" + year + " " + hours + ":" + mins;
 }
 
 function keyNav(event) {
