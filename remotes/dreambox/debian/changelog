@@ -1,3 +1,9 @@
+multimote-dreambox (0.0.4) unstable; urgency=low
+
+  * Bug fix: Displaying the timer event list shows only duplicates of the first timer event.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Sat, 19 Apr 2014 14:24:15 +0000
+
 multimote-dreambox (0.0.3) unstable; urgency=low
 
   * Added timer event functions.

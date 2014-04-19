@@ -9,7 +9,7 @@
     <li>Volume keys: Volume up/down</li>
     </ul>]]>
     </description>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <orientation>Qt::Horizontal | Qt::Vertical</orientation>
     <page name="page1">
         <volumeKeys name="volumeKeys1">

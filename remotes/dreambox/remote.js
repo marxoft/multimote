@@ -206,7 +206,7 @@ function loadTimerEvents(response) {
 
     if (links) {
         for (var i = 0; i < links.length; i++) {
-            var link = decodeURIComponent(links[0]);
+            var link = decodeURIComponent(links[i]);
             var ref = link.split("ref=")[1].split("&")[0];
             var channel = link.split("channel=")[1].split("&")[0];
             var start = parseInt(link.split("start=")[1].split("&")[0]);
