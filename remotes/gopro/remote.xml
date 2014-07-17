@@ -31,7 +31,7 @@
         <listSelector name="orientationSelector">
             <row>2</row>
             <colSpan>3</colSpan>
-            <text>Mode</text>
+            <text>Orientation</text>
             <element name="Head up" value="" />
             <element name="Head down" value="%01" />
             <onSelected>setOrientation(orientationSelector.currentValue)</onSelected>
@@ -39,7 +39,7 @@
         <listSelector name="videoResolutionSelector">
             <row>3</row>
             <colSpan>3</colSpan>
-            <text>Mode</text>
+            <text>Video resolution</text>
             <element name="WVGA-60" value="" />
             <element name="WVGA-120" value="%01" />
             <element name="720-30" value="%02" />
@@ -52,7 +52,7 @@
         <listSelector name="photoResolutionSelector">
             <row>4</row>
             <colSpan>3</colSpan>
-            <text>Mode</text>
+            <text>Photo resolution</text>
             <element name="11mp wide" value="" />
             <element name="8mp medium" value="%01" />
             <element name="5mp wide" value="%02" />
