@@ -20,10 +20,12 @@ var isOn = false;
 
 function powerOn() {
     http.get(ipaddress + "/bacpac/PW?t=" + password + "&p=%01");
+    isOn = true;
 }
 
 function powerOff() {
     http.get(ipaddress + "/bacpac/PW?t=" + password + "&p=");
+    isOn = false;
 }
 
 function togglePower() {
