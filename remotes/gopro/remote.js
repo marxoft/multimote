@@ -35,8 +35,6 @@ function togglePower() {
     else {
         powerOn();
     }
-
-    isOn = !isOn;
 }
 
 function startCapture() {
