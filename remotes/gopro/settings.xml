@@ -1,0 +1,11 @@
+<settings>
+    <group name="Connection" />
+    <text key="ipaddress" name="IP Address" />
+    <text key="password" name="Password" />
+    <group name="Other" />
+    <list key="screenOrientation" default="Qt::Horizontal | Qt::Vertical" name="Screen orientation" onChanged="screen.orientationLock = screenOrientation">
+	<element name="Automatic" value="Qt::Horizontal | Qt::Vertical" />
+        <element name="Landscape" value="Qt::Horizontal" />
+        <element name="Portrait" value="Qt::Vertical" />
+    </list>
+</settings>

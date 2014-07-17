@@ -1,0 +1,63 @@
+<remote>
+    <title>GoPro</title>
+    <description>A simple GoPro remote.</description>
+    <version>0.0.1</version>
+    <orientation>Qt::Horizontal | Qt::Vertical</orientation>
+    <page name="page1">
+        <button name="powerButton">
+            <iconSource>location_applet_on</iconSource>
+            <onClicked>togglePower()</onClicked>
+        </button>
+        <button name="startButton">
+            <column>1</column>
+            <iconSource>camera_video_recording</iconSource>
+            <onClicked>startCapture()</onClicked>
+        </button>
+        <button name="stopButton">
+            <column>2</column>
+            <iconSource>camera_video_stop</iconSource>
+            <onClicked>stopCapture()</onClicked>
+        </button>
+        <listSelector name="modeSelector">
+            <row>1</row>
+            <colSpan>3</colSpan>
+            <text>Mode</text>
+            <element name="Camera" value="" />
+            <element name="Photo" value="%01" />
+            <element name="Burst" value="%02" />
+            <element name="Timelapse" value="%03" />
+            <onSelected>setMode(modeSelector.currentValue)</onSelected>
+        </listSelector>
+        <listSelector name="orientationSelector">
+            <row>2</row>
+            <colSpan>3</colSpan>
+            <text>Mode</text>
+            <element name="Head up" value="" />
+            <element name="Head down" value="%01" />
+            <onSelected>setOrientation(orientationSelector.currentValue)</onSelected>
+        </listSelector>
+        <listSelector name="videoResolutionSelector">
+            <row>3</row>
+            <colSpan>3</colSpan>
+            <text>Mode</text>
+            <element name="WVGA-60" value="" />
+            <element name="WVGA-120" value="%01" />
+            <element name="720-30" value="%02" />
+            <element name="720-60" value="%03" />
+            <element name="960-30" value="%04" />
+            <element name="960-60" value="%05" />
+            <element name="1080-30" value="%06" />
+            <onSelected>setVideoResolution(videoResolutionSelector.currentValue)</onSelected>
+        </listSelector>
+        <listSelector name="photoResolutionSelector">
+            <row>4</row>
+            <colSpan>3</colSpan>
+            <text>Mode</text>
+            <element name="11mp wide" value="" />
+            <element name="8mp medium" value="%01" />
+            <element name="5mp wide" value="%02" />
+            <element name="5mp medium" value="%03" />
+            <onSelected>setPhotoResolution(photoResolutionSelector.currentValue)</onSelected>
+        </listSelector>
+    </page>
+</remote>
