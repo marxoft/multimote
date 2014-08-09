@@ -38,6 +38,7 @@ class ListSelector;
 class ListView;
 class MultiListSelector;
 class Numberpad;
+class ProgressBar;
 class RemotePage;
 class RemotePageStack;
 class SpinBox;
@@ -69,6 +70,7 @@ public:
     static TimeSelector* loadTimeSelector(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
     static ListView* loadListView(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
     static Numberpad* loadNumberpad(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
+    static ProgressBar* loadProgressBar(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
     static Slider* loadSlider(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
     static SpinBox* loadSpinBox(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);
     static TextField* loadTextField(const QDomElement &el, bool registerHandlers, QWidget *parent = 0);

@@ -29,6 +29,7 @@
 #include "listview.h"
 #include "multilistselector.h"
 #include "numberpad.h"
+#include "progressbar.h"
 #include "remotepage.h"
 #include "remotepagestack.h"
 #include "slider.h"
@@ -111,6 +112,10 @@ QObject* ControlLoader::loadControl(const QDomElement &el, bool registerHandlers
 
     if (name == "pagestack") {
         return loadPageStack(el, registerHandlers, qobject_cast<QWidget*>(parent));
+    }
+
+    if (name == "progressbar") {
+        return loadProgressBar(el, registerHandlers, qobject_cast<QWidget*>(parent));
     }
 
     if (name == "slider") {
@@ -509,6 +514,19 @@ Numberpad* ControlLoader::loadNumberpad(const QDomElement &el, bool registerHand
     }
 
     return pad;
+}
+
+ProgressBar* ControlLoader::loadProgressBar(const QDomElement &el, bool registerHandlers, QWidget *parent) {
+    ProgressBar *bar = new ProgressBar(parent);
+    bar->setObjectName(el.attribute("name"));
+    loadProperties(bar, el);
+    loadWidgetLayout(bar, el);
+
+    if (registerHandlers) {
+        registerHandlersWithScriptEngine(bar, el);
+    }
+
+    return bar;
 }
 
 Slider* ControlLoader::loadSlider(const QDomElement &el, bool registerHandlers, QWidget *parent) {
