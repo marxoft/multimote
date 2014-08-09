@@ -16,12 +16,15 @@
  */
 
 #include "selectionmodel.h"
+#include "selectionitem.h"
 
 SelectionModel::SelectionModel(QObject *parent) :
-    QStandardItemModel(parent)
+    QAbstractListModel(parent)
 {
-    m_roleNames[Qt::DisplayRole] = "name";
-    m_roleNames[Qt::UserRole + 1] = "value";
+    m_roleNames[SelectionItem::DataRole] = "data";
+    m_roleNames[SelectionItem::IconSourceRole] = "iconSource";
+    m_roleNames[SelectionItem::TextRole] = "text";
+    m_roleNames[SelectionItem::TextAlignmentRole] = "textAlignment";
 #if QT_VERSION < 0x050000
     this->setRoleNames(m_roleNames);
 #endif
@@ -35,46 +38,89 @@ QHash<int, QByteArray> SelectionModel::roleNames() const {
 }
 #endif
 
-void SelectionModel::addItem(const QString &name, const QVariant &value, Qt::Alignment textAlignment) {
-    QStandardItem *item = new QStandardItem(name);
-    item->setData(value);
-    item->setTextAlignment(textAlignment);
-    this->appendRow(item);
+int SelectionModel::rowCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent)
+
+    return m_list.size();
+}
+
+QVariant SelectionModel::data(const QModelIndex &index, int role) const {
+    if (SelectionItem *item = this->itemAt(index.row())) {
+        return item->data(role);
+    }
+    
+    return QVariant();
+}
+
+void SelectionModel::addItem(const QString &text, const QVariant &data, Qt::Alignment textAlignment) {
+    SelectionItem *item = new SelectionItem(text, data, textAlignment, this);
+    this->connect(item, SIGNAL(dataChanged()), this, SLOT(onItemDataChanged()));
+    const int size = m_list.size();
+    this->beginInsertRows(QModelIndex(), size, size);
+    m_list.append(item);
+    this->endInsertRows();
     emit countChanged(this->rowCount());
 }
 
-void SelectionModel::addItem(const QString &iconSource, const QString &name, const QVariant &value, Qt::Alignment textAlignment) {
-    QStandardItem *item = new QStandardItem(iconSource.contains('/') ? QIcon(iconSource) : QIcon::fromTheme(iconSource), name);
-    item->setData(value);
-    item->setTextAlignment(textAlignment);
-    this->appendRow(item);
+void SelectionModel::addItem(const QString &iconSource, const QString &text, const QVariant &data, Qt::Alignment textAlignment) {
+    SelectionItem *item = new SelectionItem(iconSource, text, data, textAlignment, this);
+    this->connect(item, SIGNAL(dataChanged()), this, SLOT(onItemDataChanged()));
+    const int size = m_list.size();
+    this->beginInsertRows(QModelIndex(), size, size);
+    m_list.append(item);
+    this->endInsertRows();
     emit countChanged(this->rowCount());
 }
 
-void SelectionModel::insertItem(int row, const QString &name, const QVariant &value, Qt::Alignment textAlignment) {
-    if ((row >= 0) && (row < this->rowCount() - 1)) {
-        QStandardItem *item = new QStandardItem(name);
-        item->setData(value);
-        item->setTextAlignment(textAlignment);
-        this->insertRow(row, item);
+void SelectionModel::insertItem(int row, const QString &text, const QVariant &data, Qt::Alignment textAlignment) {
+    if ((row >= 0) && (row < m_list.size())) {
+        SelectionItem *item = new SelectionItem(text, data, textAlignment, this);
+        this->connect(item, SIGNAL(dataChanged()), this, SLOT(onItemDataChanged()));
+        this->beginInsertRows(QModelIndex(), row, row);
+        m_list.insert(row, item);
+        this->endInsertRows();
         emit countChanged(this->rowCount());
     }
 }
 
-void SelectionModel::insertItem(int row, const QString &iconSource, const QString &name, const QVariant &value, Qt::Alignment textAlignment) {
+void SelectionModel::insertItem(int row, const QString &iconSource, const QString &text, const QVariant &data, Qt::Alignment textAlignment) {
     if ((row >= 0) && (row < this->rowCount() - 1)) {
-        QStandardItem *item = new QStandardItem(iconSource.contains('/') ? QIcon(iconSource) : QIcon::fromTheme(iconSource), name);
-        item->setData(value);
-        item->setTextAlignment(textAlignment);
-        this->insertRow(row, item);
+        SelectionItem *item = new SelectionItem(iconSource, text, data, textAlignment, this);
+        this->connect(item, SIGNAL(dataChanged()), this, SLOT(onItemDataChanged()));
+        this->beginInsertRows(QModelIndex(), row, row);
+        m_list.insert(row, item);
+        this->endInsertRows();
         emit countChanged(this->rowCount());
     }
 }
 
 bool SelectionModel::removeItem(int row) {
-    return this->removeRow(row);
+    if ((row >= 0) && (row < m_list.size())) {
+        delete m_list.takeAt(row);
+        return true;
+    }
+
+    return false;
 }
 
-QStandardItem* SelectionModel::itemAt(int row) const {
-    return this->item(row);
+void SelectionModel::clear() {
+    this->beginResetModel();
+    qDeleteAll(m_list);
+    m_list.clear();
+    this->endResetModel();
+}
+
+SelectionItem* SelectionModel::itemAt(int row) const {
+    if ((row >= 0) && (row < m_list.size())) {
+        return m_list.at(row);
+    }
+
+    return 0;
+}
+
+void SelectionModel::onItemDataChanged() {
+    if (SelectionItem* item = qobject_cast<SelectionItem*>(this->sender())) {
+        const QModelIndex index = this->index(m_list.indexOf(item));
+        emit dataChanged(index, index);
+    }
 }
