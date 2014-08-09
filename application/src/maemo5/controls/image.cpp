@@ -20,7 +20,6 @@
 #include <QMouseEvent>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QNetworkRequest>
 
 QNetworkAccessManager* Image::networkManager = 0;
 
