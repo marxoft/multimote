@@ -40,11 +40,11 @@ ScriptEngine::ScriptEngine(QObject *parent) :
 
     QScriptValue keyProto = this->newQObject(new KeyEventPrototype(this));
     QScriptValue mouseProto = this->newQObject(new MouseEventPrototype(this));
-    QScriptValue itemProto = this->newQObject(new StandardItemPrototype(this));
+    QScriptValue itemProto = this->newQObject(new SelectionItemPrototype(this));
 
     this->setDefaultPrototype(qMetaTypeId<QKeyEvent*>(), keyProto);
     this->setDefaultPrototype(qMetaTypeId<QMouseEvent*>(), mouseProto);
-    this->setDefaultPrototype(qMetaTypeId<QStandardItem*>(), itemProto);
+    this->setDefaultPrototype(qMetaTypeId<SelectionItem*>(), itemProto);
 
     this->globalObject().setProperty("Qt", this->newQMetaObject(&ScriptEngine::staticQtMetaObject));
     this->globalObject().setProperty("notifications", this->newQObject(new Notifications(this)));

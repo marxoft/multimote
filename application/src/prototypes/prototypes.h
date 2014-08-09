@@ -21,7 +21,7 @@
 #include "dateprototype.h"
 #include "keyeventprototype.h"
 #include "mouseeventprototype.h"
-#include "standarditemprototype.h"
+#include "selectionitemprototype.h"
 #include "timeprototype.h"
 
 #endif // PROTOTYPES_H

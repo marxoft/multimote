@@ -15,37 +15,41 @@
  * Inc., 51 Franklin St - Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef STANDARDITEMPROTOTYPE_H
-#define STANDARDITEMPROTOTYPE_H
+#ifndef SELECTIONITEMPROTOTYPE_H
+#define SELECTIONITEMPROTOTYPE_H
 
-#include <QObject>
+#include "../base/selectionitem.h"
 #include <QScriptable>
-#include <QStandardItem>
 
-class StandardItemPrototype : public QObject, public QScriptable
+class SelectionItemPrototype : public QObject, QScriptable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString text READ text WRITE setText)
-    Q_PROPERTY(QString iconSource READ iconSource WRITE setIconSource)
-    Q_PROPERTY(QVariant data READ data WRITE setData)
+    Q_PROPERTY(QString iconSource READ iconSource WRITE setIconSource NOTIFY dataChanged)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY dataChanged)
+    Q_PROPERTY(QVariant data READ data WRITE setData NOTIFY dataChanged)
+    Q_PROPERTY(Qt::Alignment textAlignment READ textAlignment WRITE setTextAlignment NOTIFY dataChanged)
 
 public:
-    explicit StandardItemPrototype(QObject *parent = 0);
+    explicit SelectionItemPrototype(QObject *parent = 0);
+
+    QString iconSource() const;
+    void setIconSource(const QString &source);
 
     QString text() const;
     void setText(const QString &text);
 
-    QString iconSource() const;
-    void setIconSource(const QString &path);
-
     QVariant data() const;
     void setData(const QVariant &data);
 
+    Qt::Alignment textAlignment() const;
+    void setTextAlignment(Qt::Alignment alignment);
+
+signals:
+    void dataChanged();
+
 private:
-    Q_DISABLE_COPY(StandardItemPrototype)
+    Q_DISABLE_COPY(SelectionItemPrototype)
 };
 
-Q_DECLARE_METATYPE(QStandardItem*)
-
-#endif // STANDARDITEMPROTOTYPE_H
+#endif // SELECTIONITEMPROTOTYPE_H
