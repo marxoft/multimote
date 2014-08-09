@@ -30,7 +30,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Save, Qt::Vertical, this)),
     m_grid(new QGridLayout(this))
 {
-    this->setWindowTitle(tr("MultiMote Settings"));
+    this->setWindowTitle(tr("MultiMote settings"));
     this->setAttribute(Qt::WA_DeleteOnClose, true);
 
     QWidget *scrollWidget = new QWidget(m_scrollArea);
