@@ -4,4 +4,5 @@ SUBDIRS += \
     dreambox \
     gopro \
     helloworld \
+    qdl \
     vlc

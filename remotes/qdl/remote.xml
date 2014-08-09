@@ -1,0 +1,579 @@
+<remote>
+    <title>QDL</title>
+    <description>
+    <![CDATA[A remote for controlling the QDL download manager.<br><br>
+    Keyboard shortcuts:
+    <ul>
+    <li>Left: Previous page of downloads</li>
+    <li>Right: Next page of downloads</li>
+    <li>Shift+Left: First page of downloads</li>
+    <li>Shift+Right: Last page of downloads</li>
+    </ul>]]>
+    </description>
+    <version>0.0.1</version>
+    <orientation>Qt::Horizontal</orientation>
+    <page name="queuePage">
+        <keyboard name="keyboard">
+            <onKeyPressed>if (!searchEdit.focus) processKeyEvent(event)</onKeyPressed>
+        </keyboard>
+        <timer name="progressTimer">
+            <interval>2000</interval>
+        </timer>
+        <timer name="captchaTimer">
+            <interval>1000</interval>
+            <repeat>true</repeat>
+            <onTriggered>Queue.updateCaptchaDialog()</onTriggered>
+        </timer>
+        <textField name="searchEdit">
+            <placeholderText>Search</placeholderText>
+            <onReturnPressed>Queue.search(searchEdit.text)</onReturnPressed>
+        </textField>
+        <listSelector name="filterSelector">
+            <row>
+                <portrait>1</portrait>
+                <landscape>0</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>1</landscape>
+            </column>
+            <minimumWidth>150</minimumWidth>
+            <text>Show</text>
+            <element name="All" value="" />
+            <element name="Downloading" value="Downloading" />
+            <element name="Queued" value="Queued" />
+            <element name="Waiting (short)" value="ShortWait" />
+            <element name="Waiting (long)" value="LongWait" />
+            <element name="Captcha required" value="CaptchaRequired" />
+            <element name="Paused" value="Paused" />
+            <element name="Failed" value="Failed" />
+            <currentIndex>0</currentIndex>
+            <onSelected>Queue.setStatusFilter(filterSelector.currentValue)</onSelected>
+        </listSelector>
+        <listSelector name="nextActionSelector">
+            <row>
+                <portrait>2</portrait>
+                <landscape>0</landscape>
+            </row>
+            <column>
+                <portrait>0</portrait>
+                <landscape>2</landscape>
+            </column>
+            <minimumWidth>150</minimumWidth>
+            <text>Next</text>
+            <element name="Continue" value="Continue" />
+            <element name="Pause" value="Pause" />
+            <element name="Quit" value="Quit" />
+            <onSelected>Queue.setProperty("nextAction", nextActionSelector.currentValue)</onSelected>
+        </listSelector>
+        <listView name="queueView">
+            <row>
+                <portrait>3</portrait>
+                <landscape>1</landscape>
+            </row>
+            <colSpan>
+                <portrait>1</portrait>
+                <landscape>3</landscape>
+            </colSpan>
+            <onCurrentItemChanged>Queue.showDownloadPropertiesDialog(item.data)</onCurrentItemChanged>
+        </listView>
+        <toolBar name="toolBar">
+            <row>
+                <portrait>4</portrait>
+                <landscape>2</landscape>
+            </row>
+            <colSpan>
+                <portrait>1</portrait>
+                <landscape>3</landscape>
+            </colSpan>
+            <alignment>Qt::AlignBottom</alignment>
+            <toolButton name="addUrlsButton">
+                <iconSource>general_add</iconSource>
+                <onClicked>Queue.showAddUrlsDialog()</onClicked>
+            </toolButton>
+            <toolButton name="retrieveUrlsButton">
+                <iconSource>general_search</iconSource>
+                <onClicked>Queue.showRetrieveUrlsDialog()</onClicked>
+            </toolButton>
+            <toolButton name="startAllButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Play.png</iconSource>
+                <onClicked>Queue.startAllTransfers()</onClicked>
+            </toolButton>
+            <toolButton name="pauseAllButton">
+                <iconSource>/etc/hildon/theme/mediaplayer/Pause.png</iconSource>
+                <onClicked>Queue.pauseAllTransfers()</onClicked>
+            </toolButton>
+            <toolButton name="reloadButton">
+                <iconSource>general_refresh</iconSource>
+                <onClicked>Queue.load()</onClicked>
+            </toolButton>
+            <toolButton name="preferencesButton">
+                <iconSource>camera_camera_setting</iconSource>
+                <onClicked>Preferences.load(); preferencesDialog.open();</onClicked>
+            </toolButton>
+            <toolButton name="speedLabel">
+                <iconSource>general_received</iconSource>
+                <text>0 kB/s</text>
+                <styleSheet>background: transparent</styleSheet>
+            </toolButton>
+        </toolBar>
+        <dialog name="downloadPropertiesDialog">
+            <title>Download properties</title>
+            <height>
+                <portrait>600</portrait>
+                <landscape>340</landscape>
+            </height>
+            <buttons>
+                <button name="startButton">
+                    <text>Start</text>
+                    <onClicked>Queue.startTransfer(queueView.currentItem.data.id); downloadPropertiesDialog.accept();</onClicked>
+                </button>
+                <button name="pauseButton">
+                    <text>Pause</text>
+                    <onClicked>Queue.pauseTransfer(queueView.currentItem.data.id); downloadPropertiesDialog.accept();</onClicked>
+                </button>
+                <button name="removeButton">
+                    <text>Remove</text>
+                    <onClicked>Queue.removeTransfer(queueView.currentItem.data.id); downloadPropertiesDialog.accept();</onClicked>
+                </button>
+            </buttons>
+            <image name="serviceIcon">
+                <width>64</width>
+                <height>64</height>
+            </image>
+            <label name="nameLabel">
+                <column>1</column>
+                <wordWrap>true</wordWrap>
+            </label>
+            <checkBox name="audioCheckbox">
+                <row>1</row>
+                <colSpan>2</colSpan>
+                <text>Convert to audio file</text>
+                <onClicked>Queue.setTransferProperty(queueView.currentItem.data.id, "convertToAudio", audioCheckbox.checked)</onClicked>
+            </checkBox>
+            <listSelector name="connectionsSelector">
+                <row>2</row>
+                <colSpan>2</colSpan>
+                <text>Connections</text>
+                <onSelected>Queue.setTransferProperty(queueView.currentItem.data.id, "preferredConnections", connectionsSelector.currentValue)</onSelected>
+            </listSelector>
+            <listSelector name="categorySelector">
+                <row>3</row>
+                <colSpan>2</colSpan>
+                <text>Category</text>
+                <onSelected>Queue.setTransferProperty(queueView.currentItem.data.id, "category", categorySelector.currentValue)</onSelected>
+            </listSelector>
+            <listSelector name="prioritySelector">
+                <row>4</row>
+                <colSpan>2</colSpan>
+                <text>Priority</text>
+                <element name="High" value="0" />
+                <element name="Normal" value="1" />
+                <element name="Low" value="2" />
+                <onSelected>Queue.setTransferProperty(queueView.currentItem.data.id, "priority", prioritySelector.currentValue)</onSelected>
+            </listSelector>
+            <progressBar name="downloadProgressBar">
+                <row>5</row>
+                <colSpan>2</colSpan>
+            </progressBar>
+            <label name="statusLabel">
+                <row>6</row>
+                <colSpan>2</colSpan>
+            </label>
+        </dialog>
+        <dialog name="addUrlsDialog">
+            <title>Add URL</title>
+            <height>
+                <portrait>280</portrait>
+                <landscape>180</landscape>
+            </height>
+            <buttons>
+                <button name="addUrlsButton">
+                    <text>Done</text>
+                    <enabled>false</enabled>
+                    <onClicked>addUrlsDialog.accept()</onClicked>
+                </button>
+            </buttons>
+            <textField name="addUrlsEdit">
+                <alignment>Qt::AlignBottom</alignment>
+                <onTextChanged>addUrlsButton.enabled = (addUrlsEdit.text != "")</onTextChanged>
+            </textField>
+            <listSelector name="urlCategorySelector">
+                <row>1</row>
+                <text>Category</text>
+            </listSelector>
+            <onAccepted>Queue.addUrls(addUrlsEdit.text, urlCategorySelector.currentValue)</onAccepted>
+        </dialog>
+        <dialog name="retrieveUrlsDialog">
+            <title>Retrieve URLs</title>
+            <height>
+                <portrait>200</portrait>
+                <landscape>100</landscape>
+            </height>
+            <buttons>
+                <button name="retrieveUrlsButton">
+                    <text>Done</text>
+                    <enabled>false</enabled>
+                    <onClicked>retrieveUrlsDialog.accept()</onClicked>
+                </button>
+            </buttons>
+            <textField name="retrieveUrlsEdit">
+                <alignment>Qt::AlignBottom</alignment>
+                <onTextChanged>retrieveUrlsButton.enabled = (retrieveUrlsEdit.text != "")</onTextChanged>
+            </textField>
+            <onAccepted>Queue.retrieveUrls(retrieveUrlsEdit.text)</onAccepted>
+        </dialog>
+        <dialog name="progressDialog">
+            <title>Please wait</title>
+            <height>
+                <portrait>240</portrait>
+                <landscape>150</landscape>
+            </height>
+            <buttons>
+                <button name="cancelButton">
+                    <text>Cancel</text>
+                    <onClicked>progressDialog.reject()</onClicked>
+                </button>
+            </buttons>
+            <label name="progressLabel">
+                <wordWrap>true</wordWrap>
+            </label>
+            <progressBar name="progressBar">
+                <row>1</row>
+            </progressBar>
+        </dialog>
+        <dialog name="captchaDialog">
+            <title>Please complete captcha</title>
+            <height>
+                <portrait>480</portrait>
+                <landscape>340</landscape>
+            </height>
+            <buttons>
+                <button name="submitCaptchaButton">
+                    <text>Done</text>
+                    <enabled>false</enabled>
+                    <onClicked>captchaDialog.accept()</onClicked>
+                </button>
+            </buttons>
+            <image name="captchaImage" />
+            <label name="captchaTimeOutLabel">
+                <row>1</row>
+                <alignment>Qt::AlignBottom</alignment>
+            </label>
+            <textField name="captchaResponseEdit">
+                <row>2</row>
+                <onTextChanged>submitCaptchaButton.enabled = (captchaResponseEdit.text != "")</onTextChanged>
+                <onReturnPressed>if (captchaResponseEdit.text) captchaDialog.accept()</onReturnPressed>
+            </textField>
+            <onAccepted>captchaTimer.stop(); Queue.setTransferProperty(Queue.captchaId, "captchaResponse", captchaResponseEdit.text);</onAccepted>
+            <onRejected>captchaTimer.stop(); Queue.setTransferProperty(Queue.captchaId, "captchaResponse", "");</onRejected>
+        </dialog>
+        <dialog name="preferencesDialog">
+            <title>Preferences</title>
+            <height>
+                <portrait>600</portrait>
+                <landscape>340</landscape>
+            </height>
+            <buttons>
+                <button name="preferencesSaveButton">
+                    <text>Save</text>
+                    <onClicked>preferencesDialog.accept()</onClicked>
+                </button>
+            </buttons>
+            <label name="downloadPathLabel">
+                <text>Default download path</text>
+            </label>
+            <textField name="downloadPathEdit">
+                <row>1</row>
+            </textField>
+            <listSelector name="concurrentSelector">
+                <row>2</row>
+                <text>Maximum concurrent downloads</text>
+                <element name="1" value="1" />
+                <element name="2" value="2" />
+                <element name="3" value="3" />
+                <element name="4" value="4" />
+                <element name="5" value="5" />
+                <onSelected>Preferences.setPreferences({ "maximumConcurrentTransfers": concurrentSelector.currentValue })</onSelected>
+            </listSelector>
+            <listSelector name="globalConnectionsSelector">
+                <row>3</row>
+                <text>Connections per download</text>
+                <element name="1" value="1" />
+                <element name="2" value="2" />
+                <element name="3" value="3" />
+                <element name="4" value="4" />
+                <onSelected>Preferences.setPreferences({ "maximumConnectionsPerTransfer": globalConnectionsSelector.currentValue })</onSelected>
+            </listSelector>
+            <listSelector name="rateLimitSelector">
+                <row>4</row>
+                <text>Maximum download speed</text>
+                <element name="Unlimited" value="0" />
+                <element name="5 kB/s" value="5000" />
+                <element name="10 kB/s" value="10000" />
+                <element name="20 kB/s" value="20000" />
+                <element name="50 kB/s" value="50000" />
+                <element name="100 kB/s" value="100000" />
+                <element name="250 kB/s" value="250000" />
+                <element name="500 kB/s" value="500000" />
+                <element name="750 kB/s" value="750000" />
+                <onSelected>Preferences.setPreferences({ "downloadRateLimit": rateLimitSelector.currentValue })</onSelected>
+            </listSelector>
+            <checkBox name="autoCheckbox">
+                <row>5</row>
+                <text>Start downloads automatically</text>
+            </checkBox>
+            <checkBox name="extractArchivesCheckbox">
+                <row>6</row>
+                <text>Extract downloaded archives</text>
+            </checkBox>
+            <checkBox name="archiveSubfoldersCheckbox">
+                <row>7</row>
+                <text>Create subfolders when extracting archives</text>
+            </checkBox>
+            <checkBox name="deleteArchivesCheckbox">
+                <row>8</row>
+                <text>Delete extracted archives</text>
+            </checkBox>
+            <button name="proxyButton">
+                <row>9</row>
+                <text>Network proxy</text>
+                <onClicked>Proxy.load(); proxyDialog.open();</onClicked>
+            </button>
+            <button name="categoriesButton">
+                <row>10</row>
+                <text>Categories</text>
+                <onClicked>Categories.load(); categoriesDialog.open();</onClicked>
+            </button>
+            <button name="accountsButton">
+                <row>11</row>
+                <text>Service accounts</text>
+                <onClicked>Accounts.load(); accountsDialog.open();</onClicked>
+            </button>
+            <button name="decaptchaButton">
+                <row>12</row>
+                <text>Decaptcha accounts</text>
+                <onClicked>Decaptcha.load(); decaptchaDialog.open();</onClicked>
+            </button>
+            <dialog name="proxyDialog">
+                <title>Network proxy</title>
+                <height>
+                    <portrait>600</portrait>
+                    <landscape>340</landscape>
+                </height>
+                <buttons>
+                    <button name="proxySaveButton">
+                        <text>Save</text>
+                        <onClicked>proxyDialog.accept()</onClicked>
+                    </button>
+                </buttons>
+                <checkBox name="proxyCheckbox">
+                    <text>Use network proxy</text>
+                </checkBox>
+                <listSelector name="proxyTypeSelector">
+                    <row>1</row>
+                    <text>Proxy type</text>
+                    <enabled>false</enabled>
+                    <element name="HTTP" value="3" />
+                    <element name="HTTP caching" value="4" />
+                    <element name="SOCKS5" value="1" />
+                </listSelector>
+                <label name="proxyHostLabel">
+                    <row>2</row>
+                    <text>Host</text>
+                    <enabled>false</enabled>
+                </label>
+                <textField name="proxyHostEdit">
+                    <row>3</row>
+                    <enabled>false</enabled>
+                </textField>
+                <label name="proxyPortLabel">
+                    <row>4</row>
+                    <text>Port</text>
+                    <enabled>false</enabled>
+                </label>
+                <textField name="proxyPortEdit">
+                    <row>5</row>
+                    <enabled>false</enabled>
+                </textField>
+                <label name="proxyUsernameLabel">
+                    <row>6</row>
+                    <text>Username</text>
+                    <enabled>false</enabled>
+                </label>
+                <textField name="proxyUsernameEdit">
+                    <row>7</row>
+                    <enabled>false</enabled>
+                </textField>
+                <label name="proxyPasswordLabel">
+                    <row>8</row>
+                    <text>Password</text>
+                    <enabled>false</enabled>
+                </label>
+                <textField name="proxyPasswordEdit">
+                    <row>9</row>
+                    <enabled>false</enabled>
+                </textField>
+                <onAccepted>Proxy.save()</onAccepted>
+            </dialog>
+            <dialog name="categoriesDialog">
+                <title>Categories</title>
+                <height>
+                    <portrait>600</portrait>
+                    <landscape>340</landscape>
+                </height>
+                <buttons>
+                    <button name="addCategoryButton">
+                        <text>Add</text>
+                        <onClicked>Categories.showEditCategoryDialog()</onClicked>
+                    </button>
+                </buttons>
+                <action name="editCategoryAction">
+                    <text>Edit</text>
+                    <onTriggered>Categories.showEditCategoryDialog(categoryView.currentItem.data)</onTriggered>
+                </action>
+                <action name="deleteCategoryAction">
+                    <text>Remove</text>
+                    <onTriggered>Categories.removeCategory(categoryView.currentItem.data)</onTriggered>
+                </action>
+                <listView name="categoryView">
+                    <onCurrentItemChanged>Categories.showEditCategoryDialog(item.data)</onCurrentItemChanged>
+                </listView>
+                <dialog name="editCategoryDialog">
+                    <title>Edit category</title>
+                    <height>
+                        <portrait>340</portrait>
+                        <landscape>260</landscape>
+                    </height>
+                    <buttons>
+                        <button name="editCategoryButton">
+                            <text>Done</text>
+                            <enabled>false</enabled>
+                            <onClicked>editCategoryDialog.accept()</onClicked>
+                        </button>
+                    </buttons>
+                    <label name="categoryNameLabel">
+                        <text>Name</text>
+                    </label>
+                    <textField name="categoryNameEdit">
+                        <row>1</row>
+                        <onTextChanged>editCategoryButton.enabled = (categoryNameEdit.text != "") 
+                                       &amp;&amp; (categoryPathEdit.text != "")</onTextChanged>
+                    </textField>
+                    <label name="categoryPathLabel">
+                        <row>2</row>
+                        <text>Path</text>
+                    </label>
+                    <textField name="categoryPathEdit">
+                        <row>3</row>
+                        <onTextChanged>editCategoryButton.enabled = (categoryNameEdit.text != "") 
+                                       &amp;&amp; (categoryPathEdit.text != "")</onTextChanged>
+                    </textField>
+                    <onAccepted>editCategoryDialog.mode == "edit" ? Categories.updateCategory(categoryNameEdit.text, categoryPathEdit.text) 
+                                                                  : Categories.addCategory(categoryNameEdit.text, categoryPathEdit.text)</onAccepted>
+                </dialog>
+            </dialog>
+            <dialog name="accountsDialog">
+                <title>Service accounts</title>
+                <height>
+                    <portrait>600</portrait>
+                    <landscape>340</landscape>
+                </height>
+                <action name="editAccountAction">
+                    <text>Edit</text>
+                    <onTriggered>Accounts.showEditAccountDialog(accountView.currentItem.data)</onTriggered>
+                </action>
+                <action name="deleteAccountAction">
+                    <text>Remove</text>
+                    <onTriggered>Accounts.removeAccount(accountView.currentItem.data)</onTriggered>
+                </action>
+                <listView name="accountView">
+                    <onCurrentItemChanged>Accounts.showEditAccountDialog(item.data)</onCurrentItemChanged>
+                </listView>
+                <dialog name="editAccountDialog">
+                    <title>Edit account</title>
+                    <height>
+                        <portrait>340</portrait>
+                        <landscape>260</landscape>
+                    </height>
+                    <buttons>
+                        <button name="editAccountButton">
+                            <text>Done</text>
+                            <enabled>false</enabled>
+                            <onClicked>editAccountDialog.accept()</onClicked>
+                        </button>
+                    </buttons>
+                    <label name="accountUsernameLabel">
+                        <text>Username/email</text>
+                    </label>
+                    <textField name="accountUsernameEdit">
+                        <row>1</row>
+                        <onTextChanged>editAccountButton.enabled = (accountUsernameEdit.text != "") 
+                                       &amp;&amp; (accountPasswordEdit.text != "")</onTextChanged>
+                    </textField>
+                    <label name="accountPasswordLabel">
+                        <row>2</row>
+                        <text>Password</text>
+                    </label>
+                    <textField name="accountPasswordEdit">
+                        <row>3</row>
+                        <onTextChanged>editAccountButton.enabled = (accountUsernameEdit.text != "") 
+                                       &amp;&amp; (accountPasswordEdit.text != "")</onTextChanged>
+                    </textField>
+                    <onAccepted>Accounts.updateAccount(accountUsernameEdit.text, accountPasswordEdit.text)</onAccepted>
+                </dialog>
+            </dialog>
+            <dialog name="decaptchaDialog">
+                <title>Decaptcha accounts</title>
+                <height>
+                    <portrait>600</portrait>
+                    <landscape>340</landscape>
+                </height>
+                <action name="editDecaptchaAccountAction">
+                    <text>Edit</text>
+                    <onTriggered>Decaptcha.showEditAccountDialog(decaptchaAccountView.currentItem.data)</onTriggered>
+                </action>
+                <action name="deleteDecaptchaAccountAction">
+                    <text>Remove</text>
+                    <onTriggered>Decaptcha.removeAccount(decaptchaAccountView.currentItem.data)</onTriggered>
+                </action>
+                <listView name="decaptchaAccountView">
+                    <onCurrentItemChanged>Decaptcha.showEditAccountDialog(item.data)</onCurrentItemChanged>
+                </listView>
+                <dialog name="editDecaptchaAccountDialog">
+                    <title>Edit account</title>
+                    <height>
+                        <portrait>340</portrait>
+                        <landscape>260</landscape>
+                    </height>
+                    <buttons>
+                        <button name="editDecaptchaAccountButton">
+                            <text>Done</text>
+                            <enabled>false</enabled>
+                            <onClicked>editDecaptchaAccountDialog.accept()</onClicked>
+                        </button>
+                    </buttons>
+                    <label name="decaptchaUsernameLabel">
+                        <text>Username/email</text>
+                    </label>
+                    <textField name="decaptchaUsernameEdit">
+                        <row>1</row>
+                        <onTextChanged>editDecaptchaAccountButton.enabled = (decaptchaUsernameEdit.text != "") 
+                                       &amp;&amp; (decaptchaPasswordEdit.text != "")</onTextChanged>
+                    </textField>
+                    <label name="decaptchaPasswordLabel">
+                        <row>2</row>
+                        <text>Password</text>
+                    </label>
+                    <textField name="decaptchaPasswordEdit">
+                        <row>3</row>
+                        <onTextChanged>editDecaptchaAccountButton.enabled = (decaptchaUsernameEdit.text != "") 
+                                       &amp;&amp; (decaptchaPasswordEdit.text != "")</onTextChanged>
+                    </textField>
+                    <onAccepted>Decaptcha.updateAccount(decaptchaUsernameEdit.text, decaptchaPasswordEdit.text)</onAccepted>
+                </dialog>
+            </dialog>
+            <onAccepted>Preferences.save()</onAccepted>
+        </dialog>
+    </page>
+</remote>
