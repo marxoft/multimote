@@ -26,7 +26,7 @@
 #include <QDesktopServices>
 #endif
 
-static const QString VERSION_NUMBER("0.0.3");
+static const QString VERSION_NUMBER("0.0.4");
 
 #if (defined Q_WS_MAEMO_5) || (defined MEEGO_EDITION_HARMATTAN)
 static const QString REMOTES_DIRECTORY("/home/user/MultiMote/remotes/");
