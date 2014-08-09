@@ -17,7 +17,7 @@
 
 #include "listselector.h"
 #include "listview.h"
-#include <QStandardItem>
+#include "../../base/selectionitem.h"
 #include <QMaemo5ListPickSelector>
 
 ListSelector::ListSelector(QWidget *parent) :
@@ -46,18 +46,26 @@ int ListSelector::currentIndex() const {
 }
 
 void ListSelector::setCurrentIndex(int i) {
+    this->disconnect(m_selector, SIGNAL(selected(QString)), this, SIGNAL(selected(QString)));
     m_selector->setCurrentIndex(i);
+    this->connect(m_selector, SIGNAL(selected(QString)), this, SIGNAL(selected(QString)));
 }
 
 QVariant ListSelector::currentValue() const {
-    return m_view->model()->index(this->currentIndex(), 0).data(Qt::UserRole + 1);
+    if (SelectionItem *item = m_view->itemAt(this->currentIndex())) {
+        return item->data();
+    }
+
+    return QVariant();
 }
 
 void ListSelector::setCurrentValue(const QVariant &value) {
     for (int i = 0; i < this->count(); i++) {
-        if (m_view->itemAt(i)->data() == value) {
-            this->setCurrentIndex(i);
-            return;
+        if (SelectionItem *item = m_view->itemAt(i)) {
+            if (item->data() == value) {
+                this->setCurrentIndex(i);
+                return;
+            }
         }
     }
 

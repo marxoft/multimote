@@ -67,7 +67,7 @@ QVariantList MultiListSelector::currentValues() const {
 void MultiListSelector::setCurrentValues(const QVariantList &values) {
     foreach (QVariant value, values) {
         for (int i = 0; i < m_dialog->view()->count(); i++) {
-            QModelIndex index = m_dialog->view()->model()->index(i, 0);
+            const QModelIndex index = m_dialog->view()->model()->index(i, 0);
 
             if (index.data(Qt::UserRole + 1) == value) {
                 m_dialog->view()->selectionModel()->select(index, QItemSelectionModel::Select);
