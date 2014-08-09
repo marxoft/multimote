@@ -1,3 +1,11 @@
+multimote (0.0.4) unstable; urgency=low
+
+  * Added support for icons in list items.
+  * Added progressBar control.
+  * Bug fixes.
+
+ -- Stuart Howarth <showarth@marxoft.co.uk>  Thu, 07 Aug 2014 00:56:13 +0000
+
 multimote (0.0.3) unstable; urgency=low
 
   * Added checkBox, dateSelector, doubleSpinBox, multiListSelector, spinBox and timeSelector controls.
