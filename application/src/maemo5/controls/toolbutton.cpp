@@ -21,6 +21,7 @@ ToolButton::ToolButton(QWidget *parent) :
     QToolButton(parent),
     ControlWidget()
 {
+    this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     this->setContextMenuPolicy(Qt::ActionsContextMenu);
 }
 
