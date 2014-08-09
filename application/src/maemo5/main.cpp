@@ -16,6 +16,7 @@
  */
 
 #include "mainwindow.h"
+#include <QMetaType>
 #if QT_VERSION >= 0x050000
 #include <QGuiApplication>
 #else
@@ -30,6 +31,9 @@ int main(int argc, char *argv[]) {
 #endif
     app.setOrganizationName("MultiMote");
     app.setApplicationName("MultiMote");
+
+    qRegisterMetaType<Qt::Orientation>("Qt::Orientation");
+    qRegisterMetaType<Qt::Orientations>("Qt::Orientations");
 
     MainWindow window;
     window.show();
