@@ -33,6 +33,9 @@ class Screen : public QObject
     Q_PROPERTY(bool inPortrait READ inPortrait NOTIFY currentOrientationChanged)
     Q_PROPERTY(bool locked READ locked NOTIFY lockStateChanged)
 
+    Q_ENUMS(Qt::Orientation)
+    Q_FLAGS(Qt::Orientations)
+
 public:
     explicit Screen(QObject *parent = 0);
     ~Screen();
