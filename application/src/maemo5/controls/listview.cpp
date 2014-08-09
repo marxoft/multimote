@@ -17,7 +17,7 @@
 
 #include "listview.h"
 #include "../../base/selectionmodel.h"
-#include <QStandardItem>
+#include "../../base/selectionitem.h"
 
 ListView::ListView(QWidget *parent) :
     QListView(parent),
@@ -79,16 +79,16 @@ void ListView::sort(Qt::SortOrder order) {
     m_model->sort(0, order);
 }
 
-QStandardItem* ListView::itemAt(int row) const {
-    return m_model->item(row);
+SelectionItem* ListView::itemAt(int row) const {
+    return m_model->itemAt(row);
 }
 
 int ListView::count() const {
     return m_model->rowCount();
 }
 
-QStandardItem* ListView::currentItem() const {
-    return m_model->itemFromIndex(this->currentIndex());
+SelectionItem* ListView::currentItem() const {
+    return m_model->itemAt(this->currentRow());
 }
 
 int ListView::currentRow() const {

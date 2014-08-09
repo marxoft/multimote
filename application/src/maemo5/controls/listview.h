@@ -22,7 +22,7 @@
 #include <QListView>
 
 class SelectionModel;
-class QStandardItem;
+class SelectionItem;
 
 class ListView : public QListView, public ControlWidget
 {
@@ -44,7 +44,7 @@ class ListView : public QListView, public ControlWidget
     Q_PROPERTY(int colSpanLandscape READ colSpanLandscape WRITE setColSpanLandscape SCRIPTABLE false)
     Q_PROPERTY(Qt::Alignment alignmentPortrait READ alignmentPortrait WRITE setAlignmentPortrait SCRIPTABLE false)
     Q_PROPERTY(Qt::Alignment alignmentLandscape READ alignmentLandscape WRITE setAlignmentLandscape SCRIPTABLE false)
-    Q_PROPERTY(QStandardItem* currentItem READ currentItem NOTIFY currentItemChanged)
+    Q_PROPERTY(SelectionItem* currentItem READ currentItem NOTIFY currentItemChanged)
     Q_PROPERTY(int currentIndex READ currentRow WRITE setCurrentRow NOTIFY currentItemChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool multiSelection READ multiSelection WRITE setMultiSelection)
@@ -57,7 +57,7 @@ public:
 
     int count() const;
 
-    QStandardItem* currentItem() const;
+    SelectionItem* currentItem() const;
 
     int currentRow() const;
     void setCurrentRow(int row);
@@ -75,15 +75,13 @@ public slots:
 
     void sort(Qt::SortOrder order = Qt::AscendingOrder);
 
-    QStandardItem* itemAt(int row) const;
-
-
+    SelectionItem* itemAt(int row) const;
 
 private slots:
     void onCurrentItemChanged();
 
 signals:
-    void currentItemChanged(QStandardItem *item);
+    void currentItemChanged(SelectionItem *item);
     void countChanged(int count);
     
 private:
